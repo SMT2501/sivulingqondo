@@ -1,0 +1,57 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+header img { height: 50px; }
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+nav a:hover { color: #4a704a; }
+.hero {
+    position: relative;
+    text-align: center;
+    color: white;
+    height: 400px;
+    background: url('hero-image.jpg') no-repeat center/cover;
+}
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.hero h1 { font-size: 2.5em; margin: 0; }
+.hero p { font-size: 1.2em; }
+.btn { padding: 10px 20px; margin: 10px; border: none; cursor: pointer; }
+.btn-primary { background-color: #4a704a; color: white; }
+.btn-secondary { background-color: white; color: #4a704a; border: 1px solid #4a704a; }
+.impact, .gallery, .get-involved {
+    padding: 40px 20px;
+    text-align: center;
+}
+.impact-grid { display: flex; justify-content: space-around; flex-wrap: wrap; }
+.impact-card { width: 20%; min-width: 150px; margin: 10px; }
+.why, .gallery-preview { display: flex; align-items: center; padding: 40px 20px; }
+.why img, .gallery-preview img { width: 50%; }
+.why-text, .gallery-preview-text { width: 50%; padding: 0 20px; }
+.gallery-preview img { width: 23%; margin: 1%; }
+footer { background-color: #333; color: white; text-align: center; padding: 20px; }
+@media (max-width: 768px) {
+    .why, .gallery-preview { flex-direction: column; text-align: center; }
+    .why img, .why-text, .gallery-preview img, .gallery-preview-text { width: 100%; }
+    .impact-card { width: 45%; }
+}
