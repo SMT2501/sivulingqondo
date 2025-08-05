@@ -1,204 +1,192 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sivulingqondo Community Project</title>
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        header img { height: 50px; }
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-        }
-        nav a:hover { color: #4a704a; }
-        .hero {
-            position: relative;
-            text-align: center;
-            color: white;
-            height: 400px;
-            background: url('hero-image.jpg') no-repeat center/cover;
-        }
-        .hero-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .hero h1 { font-size: 2.5em; margin: 0; }
-        .hero p { font-size: 1.2em; }
-        .btn { padding: 10px 20px; margin: 10px; border: none; cursor: pointer; }
-        .btn-primary { background-color: #4a704a; color: white; }
-        .btn-secondary { background-color: white; color: #4a704a; border: 1px solid #4a704a; }
-        .impact, .gallery, .get-involved {
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .impact-grid { display: flex; justify-content: space-around; flex-wrap: wrap; }
-        .impact-card { width: 20%; min-width: 150px; margin: 10px; }
-        .why, .gallery-preview { display: flex; align-items: center; padding: 40px 20px; }
-        .why img, .gallery-preview img { width: 50%; }
-        .why-text, .gallery-preview-text { width: 50%; padding: 0 20px; }
-        .gallery-preview img { width: 23%; margin: 1%; }
-        footer { background-color: #333; color: white; text-align: center; padding: 20px; }
-        @media (max-width: 768px) {
-            .why, .gallery-preview { flex-direction: column; text-align: center; }
-            .why img, .why-text, .gallery-preview img, .gallery-preview-text { width: 100%; }
-            .impact-card { width: 45%; }
-        }
-
-    </style>
+    <title>Sivulingqondo Community Project (SCP)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <img src="logo.png" alt="SCP Logo">
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#about">About Us</a>
-            <a href="#programs">Programs</a>
-            <a href="#get-involved">Get Involved</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#contact">Contact</a>
-            <button class="btn btn-primary">Donate</button>
-        </nav>
+        <div class="container header-container">
+            <img src="./imgs/logo.png" alt="SCP Logo" class="logo">
+            <nav>
+                <a href="#home">Home</a>
+                <a href="#about">About Us</a>
+                <a href="#programs">Programs</a>
+                <a href="#get-involved">Get Involved</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+                <a href="#donate" class="btn btn-primary">Donate</a>
+            </nav>
+        </div>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
             <h1>Empowering Our Community, One Child at a Time</h1>
             <p>Afterschool Care • Youth Skills • Food Support • Empowerment</p>
-            <button class="btn btn-primary">Learn More</button>
-            <button class="btn btn-secondary">Get Involved</button>
+            <a href="#programs" class="btn btn-primary">Learn More</a>
+            <a href="#get-involved" class="btn btn-secondary">Get Involved</a>
         </div>
     </section>
 
-    <section class="impact">
-        <h2>Our Impact Areas</h2>
-        <div class="impact-grid">
-            <div class="impact-card">
-                <span>📚</span>
-                <h3>Afterschool Care</h3>
-                <p>Homework help, reading, spelling, creative writing</p>
-            </div>
-            <div class="impact-card">
-                <span>🌱</span>
-                <h3>Youth Empowerment</h3>
-                <p>Skills training, tutoring, career exposure</p>
-            </div>
-            <div class="impact-card">
-                <span>🍲</span>
-                <h3>Soup Kitchen</h3>
-                <p>Meals 3 days a week for kids and adults</p>
-            </div>
-            <div class="impact-card">
-                <span>🏡</span>
-                <h3>Food Garden & Nutrition</h3>
-                <p>Gardening, food parcels, community health</p>
+    <!-- Impact Section -->
+    <section class="impact" id="programs">
+        <div class="container">
+            <h2>Our Impact Areas</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <span>📚</span>
+                    <h3>Afterschool Care</h3>
+                    <p>Homework help, reading, spelling, creative writing, and skills development (art, sports, crafts).</p>
+                </div>
+                <div class="impact-card">
+                    <span>🌱</span>
+                    <h3>Youth Empowerment</h3>
+                    <p>Skills training, tutoring, career exposure, and volunteer opportunities for young adults.</p>
+                </div>
+                <div class="impact-card">
+                    <span>🍲</span>
+                    <h3>Soup Kitchen</h3>
+                    <p>Nutritious meals served 3 days a week (Monday, Wednesday, Friday) for children and adults.</p>
+                </div>
+                <div class="impact-card">
+                    <span>🏡</span>
+                    <h3>Food Garden & Nutrition</h3>
+                    <p>Community gardening, food parcels distribution, and nutrition education for families.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="why">
-        <img src="why-image.jpg" alt="Children learning">
-        <div class="why-text">
-            <h2>Sivulingqondo Means “Opening the Mind”</h2>
-            <p>We believe that education, care, and nutrition form the foundation of strong communities. Through our afterschool programs, youth mentorship, and community kitchen, we support families in need and help the next generation grow with dignity and opportunity.</p>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container about-container">
+            <div class="about-image">
+                <img src="./imgs/child.jpg" alt="Children learning at SCP">
+            </div>
+            <div class="about-text">
+                <h2>Sivulingqondo Means "Opening the Mind"</h2>
+                <p>We believe that education, care, and nutrition form the foundation of strong communities. Through our afterschool programs, youth mentorship, and community kitchen, we support families in need and help the next generation grow with dignity and opportunity.</p>
+                <p>Our programs include academic intervention for grades R-7, skills development workshops, parent support groups, and nutrition initiatives that empower the entire community.</p>
+                <a href="#about" class="btn btn-primary">Our Story</a>
+            </div>
         </div>
     </section>
 
-    <section class="gallery-preview">
-        <div class="gallery-preview-text">
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
             <h2>Gallery Preview</h2>
-            <button class="btn btn-primary">View Full Gallery</button>
-        </div>
-        <div>
-            <img src="gallery1.jpg" alt="Gallery 1">
-            <img src="gallery2.jpg" alt="Gallery 2">
-            <img src="gallery3.jpg" alt="Gallery 3">
-            <img src="gallery4.jpg" alt="Gallery 4">
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="./imgs/afterschoool.png" alt="Afterschool program">
+                </div>
+                <div class="gallery-item">
+                    <img src="./imgs/black.jpg" alt="Soup kitchen">
+                </div>
+                <div class="gallery-item">
+                    <img src="./imgs/soil.png" alt="Community garden">
+                </div>
+                <div class="gallery-item">
+                    <img src="./imgs/youth.png" alt="Youth workshop">
+                </div>
+            </div>
+            <a href="#gallery" class="btn btn-primary" style="margin-top: 30px;">View Full Gallery</a>
         </div>
     </section>
 
-    <section class="get-involved">
-        <h2>Join Us in Making a Difference</h2>
-        <div class="impact-grid">
-            <div class="impact-card">
-                <span>🤝</span>
-                <h3>Volunteer</h3>
-                <p>Teach, coach, mentor</p>
-            </div>
-            <div class="impact-card">
-                <span>💸</span>
-                <h3>Donate</h3>
-                <p>Help fund meals & workshops</p>
-            </div>
-            <div class="impact-card">
-                <span>📣</span>
-                <h3>Partner</h3>
-                <p>NGOs, schools, businesses</p>
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>Voices from Our Community</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        This program helped my son improve his reading skills and confidence. He's now doing much better in school.
+                    </div>
+                    <div class="testimonial-author">- Parent of Grade 4 Learner</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        Volunteering here gave me valuable experience that helped me get into college. I'm now studying education.
+                    </div>
+                    <div class="testimonial-author">- Former Youth Volunteer</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        The meals from the soup kitchen help my family get through tough weeks. We're so grateful for this support.
+                    </div>
+                    <div class="testimonial-author">- Community Member</div>
+                </div>
             </div>
         </div>
-        <button class="btn btn-primary">Become a Supporter</button>
     </section>
 
-    <footer>
-        <p>Contact: +27 123 456 789 | info@scp.org | Address: 123 Community St, SA</p>
-        <p>&copy; 2025 Sivulingqondo Community Project. All rights reserved.</p>
+    <!-- Get Involved Section -->
+    <section class="get-involved" id="get-involved">
+        <div class="container">
+            <h2>Join Us in Making a Difference</h2>
+            <div class="involve-grid">
+                <div class="involve-card">
+                    <span>🤝</span>
+                    <h3>Volunteer</h3>
+                    <p>Teach, coach, mentor, or help with daily operations</p>
+                </div>
+                <div class="involve-card">
+                    <span>💸</span>
+                    <h3>Donate</h3>
+                    <p>Help fund meals, workshops, and educational materials</p>
+                </div>
+                <div class="involve-card">
+                    <span>📣</span>
+                    <h3>Partner</h3>
+                    <p>NGOs, schools, and businesses can collaborate with us</p>
+                </div>
+            </div>
+            <a href="#contact" class="btn btn-primary">Become a Supporter</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>About SCP</h3>
+                    <p>Sivulingqondo Community Project is a grassroots organization empowering children, youth, and families through education, nutrition, and skills development.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#home">Home</a>
+                    <a href="#about">About Us</a>
+                    <a href="#programs">Programs</a>
+                    <a href="#get-involved">Get Involved</a>
+                    <a href="#gallery">Gallery</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <div class="contact-info">
+                        <p><strong>Phone:</strong> +27 123 456 789</p>
+                        <p><strong>Email:</strong> info@scp.org</p>
+                        <p><strong>Address:</strong> 123 Community St, South Africa</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="WhatsApp">💬</a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Sivulingqondo Community Project. All rights reserved.</p>
+                <p>Developed by <a href="http://virtuodesigns.online" target="_blank" rel="noopener noreferrer">Virtuo Designs</a></p>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
