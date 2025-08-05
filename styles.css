@@ -75,6 +75,8 @@ p {
     margin-bottom: 15px;
 }
 
+/* Existing :root and global styles remain unchanged */
+
 /* Header Styles */
 header {
     background-color: #fff;
@@ -92,8 +94,23 @@ header {
     padding: 15px 0;
 }
 
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
 .logo {
     height: 50px;
+    margin-right: 10px;
+}
+
+.site-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 1.2rem;
+    white-space: nowrap;
 }
 
 nav {
@@ -140,6 +157,41 @@ nav a:hover {
 
 .hamburger[aria-expanded="true"] span:nth-child(3) {
     transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .site-name {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-name {
+        display: block;
+        content: "SCP";
+    }
 }
 
 /* Hero Section */
